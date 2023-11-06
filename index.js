@@ -31,10 +31,41 @@ async function run() {
   try {
     await client.connect();
 
+    // target categorys
+
+    const categoryesDB = client.db("categoryesDB").collection("categoryes");
+    const jobsDB = client.db('jobsDB').collection('jobs')
+
+    // category and jobs
+    app.get('/categoryes',async(req,res) => {
+        const result = await categoryesDB.find().toArray();
+        res.send(result)
+    })
+
+    app.get("/categoryesitem",async(req,res) => {
+
+      if (req.query.name !== "All Jobs") {
+        const query = { category: req.query.name };
+        const result = await jobsDB.find(query).toArray();
+        res.send(result);
+      }else{
+        const result = await jobsDB.find().toArray();
+        res.send(result);
+      }
+      
+    });
+
+    app.get('/alljobs',async(req,res) => {
+      const result = await jobsDB.find().toArray();
+      res.send(result)
+    })
+
+    app.get('/job',async(req,res) => {
+      const id = req.query.id;
+      console.log(id)
+    })
 
     
-
-
     
     await client.db("admin").command({ ping: 1 });
     console.log(
