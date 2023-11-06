@@ -62,7 +62,17 @@ async function run() {
 
     app.get('/job',async(req,res) => {
       const id = req.query.id;
-      console.log(id)
+      const result = await jobsDB.findOne({_id:new ObjectId(id)});
+      res.send(result);
+    })
+
+
+    // job post 
+
+    app.post('/jobpost',async(req,res) => {
+      const job = req.body;
+      const result = await jobsDB.insertOne(job);
+      res.send(result);
     })
 
     
