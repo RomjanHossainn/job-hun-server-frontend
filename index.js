@@ -143,6 +143,12 @@ async function run() {
 
     // get bids job 
 
+    app.get("/yourbidsjobs",async(req,res) => {
+      const query = {email : req.query.email}
+      const result = await jobBidsDB.find(query).toArray();
+      res.send(result);
+    });
+
     
     
     await client.db("admin").command({ ping: 1 });
