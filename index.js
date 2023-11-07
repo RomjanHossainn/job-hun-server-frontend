@@ -103,7 +103,7 @@ async function run() {
         dead_line,
         email,
         description,} = newJobs || {}
-      console.log(newJobs)
+      
       const filter = {_id:new ObjectId(id)}
       const updateJob = {
         $set: {
@@ -156,6 +156,33 @@ async function run() {
       const query = {buyeremail : req.query.email};
       const result = await jobBidsDB.find(query).toArray();
       res.send(result)
+    })
+
+    // accept 
+
+    app.patch('/bidstatus',async(req,res) => {
+      const id = req.query.id;
+      const query = {_id:new ObjectId(id)};
+      const {newstatus} = req.body;
+      const updateStataus = {
+        $set : {
+          status : newstatus,
+        }
+      }
+
+      const result = await jobBidsDB.updateOne(query,updateStataus);
+      res.send(result)
+
+    })
+
+
+    // my bids delete 
+
+    app.delete('/deletemybid',async(req,res) => {
+      const id = req.query.id;
+      const query = {_id:new ObjectId(id)};
+      const result = await jobBidsDB.deleteOne(query);
+      res.send(result);
     })
 
     
