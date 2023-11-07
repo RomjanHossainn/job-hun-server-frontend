@@ -125,8 +125,11 @@ async function run() {
     // job delete 
 
     app.delete('/jobdelete',async(req,res) => {
-      const query = req.query.id;
-      console.log(query)
+      const id = req.query.id;
+      const query = {_id:new ObjectId(id)};
+      const result = await jobsDB.deleteOne(query);
+      res.send(result);
+      
     })
 
     
