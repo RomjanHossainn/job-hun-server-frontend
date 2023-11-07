@@ -149,6 +149,15 @@ async function run() {
       res.send(result);
     });
 
+
+    // get buyer email job 
+
+    app.get('/buyeremailjobs',async(req,res) => {
+      const query = {buyeremail : req.query.email};
+      const result = await jobBidsDB.find(query).toArray();
+      res.send(result)
+    })
+
     
     
     await client.db("admin").command({ ping: 1 });
