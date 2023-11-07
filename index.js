@@ -121,6 +121,14 @@ async function run() {
       res.send(result);
     })
 
+
+    // job delete 
+
+    app.delete('/jobdelete',async(req,res) => {
+      const query = req.query.id;
+      console.log(query)
+    })
+
     
     
     await client.db("admin").command({ ping: 1 });
