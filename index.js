@@ -34,7 +34,8 @@ async function run() {
     // target categorys
 
     const categoryesDB = client.db("categoryesDB").collection("categoryes");
-    const jobsDB = client.db('jobsDB').collection('jobs')
+    const jobsDB = client.db('jobsDB').collection('jobs');
+    const jobBidsDB = client.db("jobBidsDB").collection('jobsbids');
 
     // category and jobs
     app.get('/categoryes',async(req,res) => {
@@ -131,6 +132,16 @@ async function run() {
       res.send(result);
       
     })
+
+
+    // post bids job 
+    app.post('/postbidsjob',async(req,res) => {
+      const bidsData = req.body;
+      const result = await jobBidsDB.insertOne(bidsData);
+      res.send(result);
+    })
+
+    // get bids job 
 
     
     
