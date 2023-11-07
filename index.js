@@ -87,6 +87,40 @@ async function run() {
       res.send(result);
     })
 
+
+    // updatejob
+
+    app.put('/updatejob',async(req,res) => {
+      const id = req.query.id;
+      const newJobs = req.body;
+      const {min_salary,
+        max_salary,
+        job_title,
+        location,
+        jobType,
+        category,
+        dead_line,
+        email,
+        description,} = newJobs || {}
+      console.log(newJobs)
+      const filter = {_id:new ObjectId(id)}
+      const updateJob = {
+        $set: {
+          min_salary,
+          max_salary,
+          job_title,
+          location,
+          jobType,
+          category,
+          dead_line,
+          email,
+          description,
+        },
+      };
+      const result = await jobsDB.updateOne(filter,updateJob);
+      res.send(result);
+    })
+
     
     
     await client.db("admin").command({ ping: 1 });
