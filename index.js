@@ -8,10 +8,11 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 app.use(
-  cors({
-    origin: ["http://localhost:5173"],
-    credentials : true
-  })
+  cors()
+  // cors({
+  //   origin: ["http://localhost:5173"],
+  //   credentials : true
+  // })
 );
 app.use(express.json())
 app.use(cookiePerser())
@@ -125,10 +126,7 @@ async function run() {
 
     app.get('/mypostedjob',async(req,res) => {
       
-      let query = {}
-      if(req.query.email){
-        query = {email:req.query.email};
-      }
+      let query = { email: req.query.email };
       const result = await jobsDB.find(query).toArray();
       res.send(result);
     })
