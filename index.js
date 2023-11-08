@@ -185,6 +185,20 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/sortingdata',async(req,res) => {
+      
+      const { accepted, pending, emailid } = req.query;
+        const statusOrder = [accepted, pending];
+        const query = { email: emailid };
+        const result = await jobBidsDB.find(query).toArray();
+        const resultdata = result.sort(
+          (a, b) =>
+            statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+        );
+        return res.send(resultdata);
+      
+    })
+
     
     
     await client.db("admin").command({ ping: 1 });
