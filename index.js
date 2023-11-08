@@ -1,18 +1,46 @@
 const express = require('express');
 const app = express();
+const jwt = require('jsonwebtoken');
+const cookiePerser = require('cookie-parser');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion,ObjectId } = require("mongodb");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
-app.use(cors())
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials : true
+  })
+);
 app.use(express.json())
-
+app.use(cookiePerser())
 
 app.get('/',(req,res) => {
     res.send('the server is starting')
 })
 
+
+
+// const veryfyToken = async (req,res,next) => {
+//   const token = req.cookies.token;
+//   if(!token){
+//     return res
+//     .status(401)
+//     .send({message : 'not authorize'})
+//   }
+//   jwt.verify(token,process.env.ACCRESS_TOKEN_SECRET,(err ,decoded) => {
+//     if(err){
+//       console.log(err)
+//       return res.status(401).send({message : 'Unauthorize'})
+//     }
+    
+//     req.decoded = decoded;
+//     next();
+
+//   })
+  
+// }
 
 
 
@@ -30,6 +58,22 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
+
+
+    // jwt 
+
+    app.post('/jwt',async(req,res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCRESS_TOKEN_SECRET, {
+        expiresIn: "23h",
+      });
+      res
+      .cookie('token',token,{
+        httpOnly : true,
+        secure : false,
+      })
+      .send({success : true})
+    })
 
     // target categorys
 
@@ -80,6 +124,7 @@ async function run() {
     // get my job post 
 
     app.get('/mypostedjob',async(req,res) => {
+      
       let query = {}
       if(req.query.email){
         query = {email:req.query.email};
@@ -144,6 +189,9 @@ async function run() {
     // get bids job 
 
     app.get("/yourbidsjobs",async(req,res) => {
+      // if(req.query.email !== req.decoded.email){
+      //   return res.status(403).send({message :'no accress'})
+      // }
       const query = {email : req.query.email}
       const result = await jobBidsDB.find(query).toArray();
       res.send(result);
