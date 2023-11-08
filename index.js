@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
-const jwt = require('jsonwebtoken');
-const cookiePerser = require('cookie-parser');
+// const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion,ObjectId } = require("mongodb");
 require("dotenv").config();
@@ -9,13 +8,9 @@ const port = process.env.PORT || 5000;
 
 app.use(
   cors()
-  // cors({
-  //   origin: ["http://localhost:5173"],
-  //   credentials : true
-  // })
 );
 app.use(express.json())
-app.use(cookiePerser())
+
 
 app.get('/',(req,res) => {
     res.send('the server is starting')
@@ -63,18 +58,18 @@ async function run() {
 
     // jwt 
 
-    app.post('/jwt',async(req,res) => {
-      const user = req.body;
-      const token = jwt.sign(user, process.env.ACCRESS_TOKEN_SECRET, {
-        expiresIn: "23h",
-      });
-      res
-      .cookie('token',token,{
-        httpOnly : true,
-        secure : false,
-      })
-      .send({success : true})
-    })
+    // app.post('/jwt',async(req,res) => {
+    //   const user = req.body;
+    //   const token = jwt.sign(user, process.env.ACCRESS_TOKEN_SECRET, {
+    //     expiresIn: "23h",
+    //   });
+    //   res
+    //   .cookie('token',token,{
+    //     httpOnly : true,
+    //     secure : false,
+    //   })
+    //   .send({success : true})
+    // })
 
     // target categorys
 
